@@ -10,8 +10,8 @@ O sistema analisará estatísticas de desempenho no basquete para otimizar a tom
 A plataforma avaliará a eficiência ofensiva das equipes, analisando a distribuição entre arremessos de **2 e 3 pontos**, além da **média de pontos dos jogadores**. Identificará atletas de **alto rendimento em mais de uma categoria**, destacando os que frequentemente registram **double-double** e **triple-double**. Também permitirá a análise de equipes com grandes pontuadores e monitorará **trocas no meio da temporada**, impactando o desempenho coletivo e individual.  
 O sistema poderá utilizar dados históricos para gerar insights estratégicos, ajudando técnicos, analistas e apostadores a tomar decisões mais assertivas. 🚀
 
-
 Link para dataset:  
+
 [<img src="https://img.shields.io/badge/Kaggle-20BEFF?style=for-the-badge&logo=Kaggle&logoColor=white" />](https://www.kaggle.com/datasets/vivovinco/2023-2024-nba-player-stats)
 
 
