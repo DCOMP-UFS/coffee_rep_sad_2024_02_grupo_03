@@ -1,0 +1,5 @@
+numpy==2.2.0
+pandas==2.2.3
+streamlit==1.41.1
+streamlit_card==1.0.2
+streamlit_extras==0.5.0
