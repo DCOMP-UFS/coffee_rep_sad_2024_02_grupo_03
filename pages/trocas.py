@@ -30,7 +30,8 @@ data_jogadores_filter = data_jogadores[data_jogadores.Tm!="TOT"]
 contagem_trocas_por_time = data_jogadores_filter[["Tm"]].groupby("Tm").value_counts().sort_values(ascending=False).to_frame("Quantidade de Trocas").reset_index()
 st.dataframe(contagem_trocas_por_time)
 
-
+st.write("Gráfico de barras - Quantidade de trocas por time")
+st.bar_chart(contagem_trocas_por_time[["Tm", "Quantidade de Trocas"]], x="Tm", y="Quantidade de Trocas", x_label="Time")
 
 
 #rodapé
