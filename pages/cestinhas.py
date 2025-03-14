@@ -15,6 +15,7 @@ data = load_data()
 
 st.subheader("Líderes de Pontos por Time")
 data_leaders_pts = data[['Player', 'Tm', 'PTS']]
+#eliminando linhas que juntam estatísticas de times distintos Tm=TOT (Two+ Other Teams)
 data_leaders_pts = data_leaders_pts[data_leaders_pts.Tm!="TOT"]
 leaders_pts = data_leaders_pts.loc[data_leaders_pts.groupby('Tm')['PTS'].idxmax()]
 leaders_pts = leaders_pts.sort_values(by='PTS', ascending=False)
@@ -26,12 +27,20 @@ st.divider()
 
 st.subheader("Líderes de Assistências por Time")
 data_leaders = data[['Player', 'Tm', 'AST']]
+#eliminando linhas que juntam estatísticas de times distintos Tm=TOT (Two+ Other Teams)
 data_leaders = data_leaders[data_leaders.Tm!="TOT"]
 leaders = data_leaders.loc[data_leaders.groupby('Tm')['AST'].idxmax()]
 leaders = leaders.sort_values(by='AST', ascending=False)
 st.dataframe(leaders[['Player', 'Tm', 'AST']].reset_index(drop=True))
 
-
+st.divider()
+st.subheader("Líderes de Rebotes por Time")
+lider_rebotes_por_time = data.loc[data.groupby('Tm')['TRB'].idxmax()]
+#eliminando linhas que juntam estatísticas de times distintos Tm=TOT (Two+ Other Teams)
+lider_rebotes_por_time = lider_rebotes_por_time[lider_rebotes_por_time.Tm!="TOT"]
+lider_rebotes_por_time_ordenado = lider_rebotes_por_time.sort_values(by="TRB",ascending=False)
+#filter_df = dataframe_explorer(lider_rebotes_por_time_ordenado)
+st.dataframe(lider_rebotes_por_time_ordenado[['Player','Tm','ORB','DRB','TRB']].reset_index(drop=True))
 
 
 
