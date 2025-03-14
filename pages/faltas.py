@@ -31,15 +31,15 @@ st.metric("Média de Faltas Cometidas (TOP 5)", round(media_faltas, 2))
 st.divider()
 # Expansão para os 10 jogadores com mais faltas cometidas
 
-with st.expander("Tabela com Top 10 jogadores com mais faltas"):
+with st.expander("📉 Tabela com Top 10 jogadores com mais faltas 🔎"):
     # Calcular o total de faltas por jogador
     top_jogadores_faltas = df.groupby('Player')['PF'].sum().sort_values(ascending=False).head(10)
 
     # Exibir os dados em formato de tabela
-    st.write("Top 10 jogadores com mais faltas totais e suas quantidades de faltas:")
+    st.write("📉 Top 10 jogadores com mais faltas totais e suas quantidades de faltas:")
     st.dataframe(top_jogadores_faltas)
 
-with st.expander("Top 5 jogadores com mais faltas totais"):
+with st.expander("📉 Top 5 jogadores com mais faltas totais 📊"):
     # Calcular o total de faltas por jogador
     top_jogadores_faltas = df.groupby('Player')['PF'].sum().sort_values(ascending=False).head(5)
 
@@ -47,8 +47,8 @@ with st.expander("Top 5 jogadores com mais faltas totais"):
     plt.figure(figsize=(10, 6))
     ax = top_jogadores_faltas.plot(kind='bar', color='lightcoral', edgecolor='black')
     plt.title(" Gráfico com o Top 5 Jogadores com Mais Faltas")
-    plt.ylabel("Jogadores")
-    plt.xlabel("Quantidade de Faltas")
+    plt.ylabel("Quantidade de Faltas")
+    plt.xlabel("Jogadores")
     
     # Alinhamento do gráfico
     plt.grid(axis='y', linestyle='--', alpha=0.7)
