@@ -22,7 +22,7 @@ st.markdown("* SG (Shooting Guard) - grandes pontuadores e defensores")
 st.markdown("* C (Center) - defensores com fortes rebotes")
 st.markdown("* SF (Small Forward) - versáteis")
 
-data_main_stats = data[['Player', "Tm", 'Pos', 'PTS', 'AST', 'TRB']]
+data_main_stats = data[['Player', "Tm", 'Pos', 'PTS', 'AST', 'TRB', 'FT', 'FTA']]
 #eliminando linhas que juntam estatísticas de times distintos Tm=TOT (Two+ Other Teams)
 data_main_stats = data_main_stats[data_main_stats.Tm!="TOT"]
 leaders_pts = data_main_stats.groupby('Pos')[['PTS', 'AST', 'TRB']].mean()
@@ -81,8 +81,23 @@ with st.expander("📉🚨 Média de Pontos das 5 Equipes com Menor Desempenho")
                 f"{bar.get_height():.2f}",
                 ha='center', va='bottom', fontsize=10, fontweight='bold')
 
-    # Exibe o gráfico no Streamlit
+    # Exibe o gráfico
     st.pyplot(fig)
+# Análise da Média de FTA e Pontos Feitos a Partir de FT por Equipe
+with st.expander("📊 Média de Lances e Pontos Feitos por Lances Livres das Equipes"):
+
+    # Calculando a média de FTA e FT por equipe
+    md_fta_ft_equipes = data_main_stats.groupby("Tm")[["FTA", "FT"]].mean().sort_values(by="FTA", ascending=False).reset_index()
+
+    # Renomeando as colunas
+    md_fta_ft_equipes = md_fta_ft_equipes.rename(columns={
+        "Tm": "Equipe",
+        "FTA": "Média de Lances Livres - FTA",
+        "FT": "Média de  Pontos Feitos por Lances Livres - FT"
+    })
+
+    # Exibindo a tabela
+    st.dataframe(md_fta_ft_equipes.style.format({"Média de Lances Livres - FTA": "{:.2f}", "Média de  Pontos Feitos por Lances Livres - FT": "{:.2f}"}), use_container_width=True)
 
 
 
