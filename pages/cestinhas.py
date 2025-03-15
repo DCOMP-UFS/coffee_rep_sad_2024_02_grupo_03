@@ -35,27 +35,20 @@ st.dataframe(leaders[['Player', 'Tm', 'AST']].reset_index(drop=True))
 
 st.divider()
 st.subheader("Líderes de Rebotes por Time")
+
+st.markdown("* Player - nome do jogador")
+st.markdown("* Tm (Team) - sigla do time ")
+st.markdown("* ORB (offensive rebounds) - rebotes ofensivos por jogo")
+st.markdown("* DRB (defensive rebounds) - rebotes defensivos por jogo")
+st.markdown("* TRB (total rebounds) - rebotes por jogo")
+
+
 lider_rebotes_por_time = data.loc[data.groupby('Tm')['TRB'].idxmax()]
 #eliminando linhas que juntam estatísticas de times distintos Tm=TOT (Two+ Other Teams)
 lider_rebotes_por_time = lider_rebotes_por_time[lider_rebotes_por_time.Tm!="TOT"]
 lider_rebotes_por_time_ordenado = lider_rebotes_por_time.sort_values(by="TRB",ascending=False)
 #filter_df = dataframe_explorer(lider_rebotes_por_time_ordenado)
 st.dataframe(lider_rebotes_por_time_ordenado[['Player','Tm','ORB','DRB','TRB']].reset_index(drop=True))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #rodapé

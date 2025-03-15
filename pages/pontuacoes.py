@@ -100,6 +100,36 @@ with st.expander("📊 Média de Lances e Pontos Feitos por Lances Livres das Eq
     st.dataframe(md_fta_ft_equipes.style.format({"Média de Lances Livres - FTA": "{:.2f}", "Média de  Pontos Feitos por Lances Livres - FT": "{:.2f}"}), use_container_width=True)
 
 
+st.subheader("Média de pontos, assistências e rebotes dos jogadores")
+
+data_leaders_pts = data.groupby(["Player", "Tm"])[['FG', 'TRB', 'AST']].mean()
+leaders_pts = data_leaders_pts.sort_values(by=['FG'], ascending=False)
+leaders_pts = leaders_pts.reset_index()
+leaders_pts = leaders_pts.rename(columns={
+    "Player": "Jogador",
+    "Tm": "Time",
+    "FG": "Pontos através de cestas (2 ou 3 pontos)",
+    "TRB": "Rebotes",
+    "AST": "Assistências"
+})
+st.dataframe(leaders_pts)
+
+
+st.subheader("Média de cestas de 2 pontos das equipes Top 8")
+
+
+data["2P"] = data["FG"] - data["3P"]
+
+media_cestas = data.groupby("Tm")[["2P"]].mean()
+
+media_cestas_ordenado = media_cestas.sort_values(by="2P", ascending=False).head(8).reset_index()
+
+media_cestas_ordenado = media_cestas_ordenado.rename(columns={
+    "Tm": "Time",
+    "2P": "Média de cestas de 2 pontos"
+})
+
+st.dataframe(media_cestas_ordenado)
 
 #rodapé
 st.divider()
