@@ -60,7 +60,6 @@ media_cestas_ordenado = media_cestas_ordenado.rename(columns={
     "Tm": "Time",
     "2P": "Média de cestas de 2 pontos"
 })
-
 st.dataframe(media_cestas_ordenado)
 
 st.divider()
