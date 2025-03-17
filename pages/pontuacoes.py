@@ -21,6 +21,7 @@ st.markdown("* PF (Power Forward) - defensores")
 st.markdown("* SG (Shooting Guard) - grandes pontuadores e defensores")
 st.markdown("* C (Center) - defensores com fortes rebotes")
 st.markdown("* SF (Small Forward) - versáteis")
+st.markdown("* 3P% - porcentagem de acertos dos arremessos de 3 pontos")
 
 data_main_stats = data[['Player', "Tm", 'Pos', 'PTS', 'AST', 'TRB', 'FT', 'FTA']]
 #eliminando linhas que juntam estatísticas de times distintos Tm=TOT (Two+ Other Teams)
@@ -131,7 +132,69 @@ media_cestas_ordenado = media_cestas_ordenado.rename(columns={
 
 st.dataframe(media_cestas_ordenado)
 
+
+teams_stats = data.groupby("Tm")[["FG%", "FT%", "3P", "PTS", "AST", "TRB"]].mean().reset_index()
+
+
+top8_3p = teams_stats.sort_values(by="3P", ascending=False).head(8)
+
+top5_pts = teams_stats.sort_values(by="PTS", ascending=False).head(5)
+top5_ast = teams_stats.sort_values(by="AST", ascending=False).head(5)
+top5_trb = teams_stats.sort_values(by="TRB", ascending=False).head(5)
+
+with st.expander("Top 8 Equipes em 3P% (Three-Point Percentage)"):
+    fig_3p, ax_3p = plt.subplots(figsize=(10, 6))
+    bars_3p = ax_3p.bar(top8_3p["Tm"], top8_3p["3P"], color='darkorange', edgecolor='black')
+    ax_3p.set_title("Top 8 Equipes - 3P%", fontsize=14, fontweight='bold')
+    ax_3p.set_ylabel("3P%", fontsize=12)
+    ax_3p.set_xlabel("Equipe", fontsize=12)
+    ax_3p.set_xticklabels(top8_3p["Tm"], rotation=45, fontsize=10)
+    
+    for bar in bars_3p:
+        ax_3p.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                   f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
+    st.pyplot(fig_3p)
+
+with st.expander("Top 5 Equipes em Média de Pontos"):
+    fig_pts, ax_pts = plt.subplots(figsize=(10, 6))
+    bars_pts = ax_pts.bar(top5_pts["Tm"], top5_pts["PTS"], color='purple', edgecolor='black')
+    ax_pts.set_title("Top 5 Equipes - Média de Pontos", fontsize=14, fontweight='bold')
+    ax_pts.set_ylabel("Média de Pontos", fontsize=12)
+    ax_pts.set_xlabel("Equipe", fontsize=12)
+    ax_pts.set_xticklabels(top5_pts["Tm"], rotation=45, fontsize=10)
+    
+    for bar in bars_pts:
+        ax_pts.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                    f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
+    st.pyplot(fig_pts)
+
+with st.expander("Top 5 Equipes em Média de Assistências"):
+    fig_ast, ax_ast = plt.subplots(figsize=(10, 6))
+    bars_ast = ax_ast.bar(top5_ast["Tm"], top5_ast["AST"], color='teal', edgecolor='black')
+    ax_ast.set_title("Top 5 Equipes - Média de Assistências", fontsize=14, fontweight='bold')
+    ax_ast.set_ylabel("Média de Assistências", fontsize=12)
+    ax_ast.set_xlabel("Equipe", fontsize=12)
+    ax_ast.set_xticklabels(top5_ast["Tm"], rotation=45, fontsize=10)
+    
+    for bar in bars_ast:
+        ax_ast.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                    f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
+    st.pyplot(fig_ast)
+
+with st.expander("Top 5 Equipes em Média de Rebotes"):
+    fig_trb, ax_trb = plt.subplots(figsize=(10, 6))
+    bars_trb = ax_trb.bar(top5_trb["Tm"], top5_trb["TRB"], color='brown', edgecolor='black')
+    ax_trb.set_title("Top 5 Equipes - Média de Rebotes", fontsize=14, fontweight='bold')
+    ax_trb.set_ylabel("Média de Rebotes", fontsize=12)
+    ax_trb.set_xlabel("Equipe", fontsize=12)
+    ax_trb.set_xticklabels(top5_trb["Tm"], rotation=45, fontsize=10)
+    
+    for bar in bars_trb:
+        ax_trb.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                    f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
+    st.pyplot(fig_trb)
 #rodapé
+
 st.divider()
 st.markdown("#### Basks&Stats🏀")
 st.markdown("📊 Sistema de Apoio à Decisão: Basquete para Apostadores")

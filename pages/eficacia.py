@@ -32,6 +32,38 @@ st.dataframe(leaders_pts[['Player','Tm','FT', 'FG', 'FG%','FT%']].reset_index(dr
 
 
 
+teams_stats = data.groupby("Tm")[["FG%", "FT%"]].mean().reset_index()
+
+top5_fg = teams_stats.sort_values(by="FG%", ascending=False).head(5)
+
+top5_ft = teams_stats.sort_values(by="FT%", ascending=False).head(5)
+
+
+with st.expander("Top 5 Equipes em FG% (Field Goal Percentage)"):
+    fig_fg, ax_fg = plt.subplots(figsize=(10, 6))
+    bars_fg = ax_fg.bar(top5_fg["Tm"], top5_fg["FG%"], color='royalblue', edgecolor='black')
+    ax_fg.set_title("Top 5 Equipes - FG%", fontsize=14, fontweight='bold')
+    ax_fg.set_ylabel("FG%", fontsize=12)
+    ax_fg.set_xlabel("Equipe", fontsize=12)
+    ax_fg.set_xticklabels(top5_fg["Tm"], rotation=45, fontsize=10)
+    
+    for bar in bars_fg:
+        ax_fg.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                   f"{bar.get_height():.2f}%", ha='center', va='bottom', fontsize=10, fontweight='bold')
+    st.pyplot(fig_fg)
+
+with st.expander("Top 5 Equipes em FT% (Free Throw Percentage)"):
+    fig_ft, ax_ft = plt.subplots(figsize=(10, 6))
+    bars_ft = ax_ft.bar(top5_ft["Tm"], top5_ft["FT%"], color='seagreen', edgecolor='black')
+    ax_ft.set_title("Top 5 Equipes - FT%", fontsize=14, fontweight='bold')
+    ax_ft.set_ylabel("FT%", fontsize=12)
+    ax_ft.set_xlabel("Equipe", fontsize=12)
+    ax_ft.set_xticklabels(top5_ft["Tm"], rotation=45, fontsize=10)
+    
+    for bar in bars_ft:
+        ax_ft.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                   f"{bar.get_height():.2f}%", ha='center', va='bottom', fontsize=10, fontweight='bold')
+    st.pyplot(fig_ft)
 
 
 #rodapé
