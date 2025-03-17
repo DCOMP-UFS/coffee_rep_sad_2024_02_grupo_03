@@ -14,5 +14,5 @@ Link para dataset:
 
 [<img src="https://img.shields.io/badge/Kaggle-20BEFF?style=for-the-badge&logo=Kaggle&logoColor=white" />](https://www.kaggle.com/datasets/vivovinco/2023-2024-nba-player-stats)
 
-
+Link streamlit: https://sad-basks-stats.streamlit.app
 <br>
