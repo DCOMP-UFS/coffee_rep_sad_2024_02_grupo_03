@@ -17,7 +17,8 @@ df = load_data()
 st.subheader("🏀 Média de Faltas Cometidas (PF) - TOP 5 Equipes")
 
 # Seleciona as top 5 equipes com mais faltas cometidas (PF)
-top_5_equipes = df.groupby('Tm')['PF'].sum().nlargest(5).reset_index()
+top_5_equipes = df[df.Tm!="TOT"]
+top_5_equipes = top_5_equipes.groupby('Tm')['PF'].sum().nlargest(5).reset_index()
 
 # Calcula a média de faltas das 5 equipes
 media_faltas_equipes = top_5_equipes['PF'].mean()
@@ -83,7 +84,8 @@ with st.expander("📉⛹🏾‍♂️  Top 5 jogadores com mais faltas totais �
 
 with st.expander("📉🏀 Tabela com Top 10 Equipes com mais Faltas 🔎"):
     # Calcular o total de faltas por equipe
-    top_equipes_faltas = df.groupby('Tm')['PF'].sum().sort_values(ascending=False).head(10)
+    top_equipes_faltas = df[df.Tm!="TOT"]
+    top_equipes_faltas = top_equipes_faltas.groupby('Tm')['PF'].sum().sort_values(ascending=False).head(10)
 
     # Exibir os dados em formato de tabela
     st.write("📉🏀 Top 10 equipes com mais faltas totais e suas quantidades de faltas:")
@@ -91,7 +93,8 @@ with st.expander("📉🏀 Tabela com Top 10 Equipes com mais Faltas 🔎"):
 
 with st.expander("📉🏀 Top 5 Equipes com mais Faltas Totais 📊"):
     # Calcular o total de faltas por equipe
-    top_equipes_faltas = df.groupby('Tm')['PF'].sum().sort_values(ascending=False).head(5)
+    top_equipes_faltas = df[df.Tm!="TOT"]
+    top_equipes_faltas = top_equipes_faltas.groupby('Tm')['PF'].sum().sort_values(ascending=False).head(5)
 
     # Gráfico de barras vertical
     plt.figure(figsize=(10, 6))
