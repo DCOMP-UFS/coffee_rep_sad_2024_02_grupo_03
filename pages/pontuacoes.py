@@ -21,7 +21,6 @@ st.markdown("* PF (Power Forward) - defensores")
 st.markdown("* SG (Shooting Guard) - grandes pontuadores e defensores")
 st.markdown("* C (Center) - defensores com fortes rebotes")
 st.markdown("* SF (Small Forward) - versáteis")
-st.markdown("* 3P% - porcentagem de acertos dos arremessos de 3 pontos")
 
 data_main_stats = data[['Player', "Tm", 'Pos', 'PTS', 'AST', 'TRB', 'FT', 'FTA']]
 #eliminando linhas que juntam estatísticas de times distintos Tm=TOT (Two+ Other Teams)
@@ -31,7 +30,56 @@ leaders_pts = leaders_pts.sort_values(by=['PTS', 'AST', 'TRB'], ascending=False)
 leaders_pts.insert(0, "Pos", leaders_pts.index)
 st.dataframe(leaders_pts[['Pos', 'PTS', 'AST', 'TRB']].reset_index(drop=True).round(2))
 
+st.divider()
 
+st.subheader("Média de Pontos, Assistências e Rebotes por Jogador")
+
+data_leaders_pts = data.groupby(["Player", "Tm"])[['FG', 'TRB', 'AST']].mean()
+leaders_pts = data_leaders_pts.sort_values(by=['FG'], ascending=False)
+leaders_pts = leaders_pts.reset_index()
+leaders_pts = leaders_pts.rename(columns={
+    "Player": "Jogador",
+    "Tm": "Time",
+    "FG": "Pontos através de cestas (2 ou 3 pontos)",
+    "TRB": "Rebotes",
+    "AST": "Assistências"
+})
+st.dataframe(leaders_pts)
+
+st.divider()
+
+st.subheader("Média de Cestas de 2 pontos das equipes Top 8")
+
+data["2P"] = data["FG"] - data["3P"]
+
+media_cestas = data.groupby("Tm")[["2P"]].mean()
+
+media_cestas_ordenado = media_cestas.sort_values(by="2P", ascending=False).head(8).reset_index()
+
+media_cestas_ordenado = media_cestas_ordenado.rename(columns={
+    "Tm": "Time",
+    "2P": "Média de cestas de 2 pontos"
+})
+
+st.dataframe(media_cestas_ordenado)
+
+st.divider()
+
+st.subheader("📊 Média de Lances e Pontos Feitos por Lances Livres das Equipes")
+# Análise da Média de FTA e Pontos Feitos a Partir de FT por Equipe
+md_fta_ft_equipes = data_main_stats.groupby("Tm")[["FTA", "FT"]].mean().sort_values(by="FTA", ascending=False).reset_index()
+# Renomeando as colunas
+md_fta_ft_equipes = md_fta_ft_equipes.rename(columns={
+        "Tm": "Equipe",
+        "FTA": "Média de Lances Livres - FTA",
+        "FT": "Média de  Pontos Feitos por Lances Livres - FT"
+})
+# Exibindo a tabela
+st.dataframe(md_fta_ft_equipes.style.format({"Média de Lances Livres - FTA": "{:.2f}", "Média de  Pontos Feitos por Lances Livres - FT": "{:.2f}"}), use_container_width=True)
+
+
+st.divider()
+st.subheader("Gráficos")
 # Análise da Média de Pontos das Equipes TOP 5
 with st.expander("🏅📈 Média de Pontos das Equipes TOP 5"):
 
@@ -84,53 +132,6 @@ with st.expander("📉🚨 Média de Pontos das 5 Equipes com Menor Desempenho")
 
     # Exibe o gráfico
     st.pyplot(fig)
-# Análise da Média de FTA e Pontos Feitos a Partir de FT por Equipe
-with st.expander("📊 Média de Lances e Pontos Feitos por Lances Livres das Equipes"):
-
-    # Calculando a média de FTA e FT por equipe
-    md_fta_ft_equipes = data_main_stats.groupby("Tm")[["FTA", "FT"]].mean().sort_values(by="FTA", ascending=False).reset_index()
-
-    # Renomeando as colunas
-    md_fta_ft_equipes = md_fta_ft_equipes.rename(columns={
-        "Tm": "Equipe",
-        "FTA": "Média de Lances Livres - FTA",
-        "FT": "Média de  Pontos Feitos por Lances Livres - FT"
-    })
-
-    # Exibindo a tabela
-    st.dataframe(md_fta_ft_equipes.style.format({"Média de Lances Livres - FTA": "{:.2f}", "Média de  Pontos Feitos por Lances Livres - FT": "{:.2f}"}), use_container_width=True)
-
-
-st.subheader("Média de pontos, assistências e rebotes dos jogadores")
-
-data_leaders_pts = data.groupby(["Player", "Tm"])[['FG', 'TRB', 'AST']].mean()
-leaders_pts = data_leaders_pts.sort_values(by=['FG'], ascending=False)
-leaders_pts = leaders_pts.reset_index()
-leaders_pts = leaders_pts.rename(columns={
-    "Player": "Jogador",
-    "Tm": "Time",
-    "FG": "Pontos através de cestas (2 ou 3 pontos)",
-    "TRB": "Rebotes",
-    "AST": "Assistências"
-})
-st.dataframe(leaders_pts)
-
-
-st.subheader("Média de cestas de 2 pontos das equipes Top 8")
-
-
-data["2P"] = data["FG"] - data["3P"]
-
-media_cestas = data.groupby("Tm")[["2P"]].mean()
-
-media_cestas_ordenado = media_cestas.sort_values(by="2P", ascending=False).head(8).reset_index()
-
-media_cestas_ordenado = media_cestas_ordenado.rename(columns={
-    "Tm": "Time",
-    "2P": "Média de cestas de 2 pontos"
-})
-
-st.dataframe(media_cestas_ordenado)
 
 
 teams_stats = data.groupby("Tm")[["FG%", "FT%", "3P", "PTS", "AST", "TRB"]].mean().reset_index()
