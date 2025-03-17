@@ -48,9 +48,7 @@ st.dataframe(leaders_pts)
 
 st.divider()
 
-st.subheader("Média de Cestas de 2 pontos das equipes Top 8")
-
-data["2P"] = data["FG"] - data["3P"]
+st.subheader("Média de Cestas de 2 pontos das Equipes por Jogador Top 8")
 
 media_cestas = data.groupby("Tm")[["2P"]].mean()
 
@@ -64,7 +62,22 @@ st.dataframe(media_cestas_ordenado)
 
 st.divider()
 
-st.subheader("📊 Média de Lances e Pontos Feitos por Lances Livres das Equipes")
+
+st.subheader("Média de Cestas de 3 pontos das Equipes por Jogador Top 8")
+
+media_cestas = data.groupby("Tm")[["3P"]].mean()
+
+media_cestas_ordenado = media_cestas.sort_values(by="3P", ascending=False).head(8).reset_index()
+
+media_cestas_ordenado = media_cestas_ordenado.rename(columns={
+    "Tm": "Time",
+    "3P": "Média de cestas de 3 pontos"
+})
+st.dataframe(media_cestas_ordenado)
+
+st.divider()
+
+st.subheader("📊 Média de Lances e Pontos Feitos por Lances Livres das Equipes por Jogador")
 # Análise da Média de FTA e Pontos Feitos a Partir de FT por Equipe
 md_fta_ft_equipes = data_main_stats.groupby("Tm")[["FTA", "FT"]].mean().sort_values(by="FTA", ascending=False).reset_index()
 # Renomeando as colunas
@@ -80,7 +93,7 @@ st.dataframe(md_fta_ft_equipes.style.format({"Média de Lances Livres - FTA": "{
 st.divider()
 st.subheader("Gráficos")
 # Análise da Média de Pontos das Equipes TOP 5
-with st.expander("🏅📈 Média de Pontos das Equipes TOP 5"):
+with st.expander("🏅📈 Média de Pontos das Equipes por Jogador TOP 5"):
 
     # Calculando a média de pontos por equipe (TOP 5)
     md_pts_maior = data_main_stats.groupby("Tm")["PTS"].mean().sort_values(ascending=False).head(5)
@@ -90,7 +103,7 @@ with st.expander("🏅📈 Média de Pontos das Equipes TOP 5"):
     bars = ax.bar(md_pts_maior.index, md_pts_maior.values, color='royalblue', edgecolor='black')
 
     # Título e rótulos
-    ax.set_title("Média de Pontos das Equipes TOP 5", fontsize=14, fontweight='bold')
+    ax.set_title("Média de Pontos das Equipes por Jogador TOP 5", fontsize=14, fontweight='bold')
     ax.set_xlabel("Equipes", fontsize=12)
     ax.set_ylabel("Média de Pontos", fontsize=12)
     ax.set_xticks(range(len(md_pts_maior.index)))
@@ -107,7 +120,7 @@ with st.expander("🏅📈 Média de Pontos das Equipes TOP 5"):
 
 
 # Análise da Média de Pontos das Equipes Menor Desempenho
-with st.expander("📉🚨 Média de Pontos das 5 Equipes com Menor Desempenho"):
+with st.expander("📉🚨 Média de Pontos das 5 Equipes por Jogador com Menor Desempenho"):
 
     # Calculando a média de pontos por equipe
     md_pts_menor = data_main_stats.groupby("Tm")["PTS"].mean().sort_values(ascending=True).head(5)
@@ -117,7 +130,7 @@ with st.expander("📉🚨 Média de Pontos das 5 Equipes com Menor Desempenho")
     bars = ax.bar(md_pts_menor.index, md_pts_menor.values, color='crimson', edgecolor='black')
 
     # Título e rótulos
-    ax.set_title("Média de Pontos das 5 Equipes com Menor Desempenho", fontsize=14, fontweight='bold')
+    ax.set_title("Média de Pontos das 5 Equipes por Jogador com Menor Desempenho", fontsize=14, fontweight='bold')
     ax.set_xlabel("Equipes", fontsize=12)
     ax.set_ylabel("Média de Pontos", fontsize=12)
     ax.set_xticks(range(len(md_pts_menor.index)))
@@ -133,42 +146,16 @@ with st.expander("📉🚨 Média de Pontos das 5 Equipes com Menor Desempenho")
     st.pyplot(fig)
 
 
-teams_stats = data.groupby("Tm")[["FG%", "FT%", "3P", "PTS", "AST", "TRB"]].mean().reset_index()
+teams_stats = data.groupby("Tm")[["FG%", "FT%","2P%", "3P%", "PTS", "AST", "TRB"]].mean().reset_index()
 
-
-top8_3p = teams_stats.sort_values(by="3P", ascending=False).head(8)
+top8_3p = teams_stats.sort_values(by="3P%", ascending=False).head(8)
+top8_2p = teams_stats.sort_values(by="2P%", ascending=False).head(8)
 
 top5_pts = teams_stats.sort_values(by="PTS", ascending=False).head(5)
 top5_ast = teams_stats.sort_values(by="AST", ascending=False).head(5)
 top5_trb = teams_stats.sort_values(by="TRB", ascending=False).head(5)
 
-with st.expander("Top 8 Equipes em 3P% (Three-Point Percentage)"):
-    fig_3p, ax_3p = plt.subplots(figsize=(10, 6))
-    bars_3p = ax_3p.bar(top8_3p["Tm"], top8_3p["3P"], color='darkorange', edgecolor='black')
-    ax_3p.set_title("Top 8 Equipes - 3P%", fontsize=14, fontweight='bold')
-    ax_3p.set_ylabel("3P%", fontsize=12)
-    ax_3p.set_xlabel("Equipe", fontsize=12)
-    ax_3p.set_xticklabels(top8_3p["Tm"], rotation=45, fontsize=10)
-    
-    for bar in bars_3p:
-        ax_3p.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
-                   f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
-    st.pyplot(fig_3p)
-
-with st.expander("Top 5 Equipes em Média de Pontos"):
-    fig_pts, ax_pts = plt.subplots(figsize=(10, 6))
-    bars_pts = ax_pts.bar(top5_pts["Tm"], top5_pts["PTS"], color='purple', edgecolor='black')
-    ax_pts.set_title("Top 5 Equipes - Média de Pontos", fontsize=14, fontweight='bold')
-    ax_pts.set_ylabel("Média de Pontos", fontsize=12)
-    ax_pts.set_xlabel("Equipe", fontsize=12)
-    ax_pts.set_xticklabels(top5_pts["Tm"], rotation=45, fontsize=10)
-    
-    for bar in bars_pts:
-        ax_pts.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
-                    f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
-    st.pyplot(fig_pts)
-
-with st.expander("Top 5 Equipes em Média de Assistências"):
+with st.expander("Top 5 Equipes em Média de Assistências por Jogador"):
     fig_ast, ax_ast = plt.subplots(figsize=(10, 6))
     bars_ast = ax_ast.bar(top5_ast["Tm"], top5_ast["AST"], color='teal', edgecolor='black')
     ax_ast.set_title("Top 5 Equipes - Média de Assistências", fontsize=14, fontweight='bold')
@@ -181,7 +168,7 @@ with st.expander("Top 5 Equipes em Média de Assistências"):
                     f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
     st.pyplot(fig_ast)
 
-with st.expander("Top 5 Equipes em Média de Rebotes"):
+with st.expander("Top 5 Equipes em Média de Rebotes por Jogador"):
     fig_trb, ax_trb = plt.subplots(figsize=(10, 6))
     bars_trb = ax_trb.bar(top5_trb["Tm"], top5_trb["TRB"], color='brown', edgecolor='black')
     ax_trb.set_title("Top 5 Equipes - Média de Rebotes", fontsize=14, fontweight='bold')
@@ -193,6 +180,35 @@ with st.expander("Top 5 Equipes em Média de Rebotes"):
         ax_trb.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
                     f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
     st.pyplot(fig_trb)
+
+
+with st.expander("Top 8 Equipes em 3P% (Three-Point Percentage)"):
+    fig_3p, ax_3p = plt.subplots(figsize=(10, 6))
+    bars_3p = ax_3p.bar(top8_3p["Tm"], top8_3p["3P%"], color='darkorange', edgecolor='black')
+    ax_3p.set_title("Top 8 Equipes - 3P%", fontsize=14, fontweight='bold')
+    ax_3p.set_ylabel("3P%", fontsize=12)
+    ax_3p.set_xlabel("Equipe", fontsize=12)
+    ax_3p.set_xticklabels(top8_3p["Tm"], rotation=45, fontsize=10)
+    
+    for bar in bars_3p:
+        ax_3p.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                   f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
+    st.pyplot(fig_3p)
+
+
+with st.expander("Top 8 Equipes em 2P% (Two-Point Percentage)"):
+    fig_4p, ax_4p = plt.subplots(figsize=(10, 6))
+    bars_4p = ax_4p.bar(top8_2p["Tm"], top8_2p["2P%"], color='darkorange', edgecolor='black')
+    ax_4p.set_title("Top 8 Equipes - 2P%", fontsize=14, fontweight='bold')
+    ax_4p.set_ylabel("2P%", fontsize=12)
+    ax_4p.set_xlabel("Equipe", fontsize=12)
+    ax_4p.set_xticklabels(top8_2p["Tm"], rotation=45, fontsize=10)
+    
+    for bar in bars_4p:
+        ax_4p.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                   f"{bar.get_height():.2f}", ha='center', va='bottom', fontsize=10, fontweight='bold')
+    st.pyplot(fig_4p)
+
 #rodapé
 
 st.divider()
