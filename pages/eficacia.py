@@ -26,13 +26,14 @@ st.markdown("* FT% - porcentagem de lances livres convertidos")
 
 data_leaders_pts = data[['Player','Tm','FT', 'FG', 'FT%','FG%']]
 data_leaders_pts_ordenado = data_leaders_pts[data_leaders_pts.Tm != "TOT"]
-leaders_pts = data_leaders_pts.sort_values(by=['FG%','FT%'], ascending=False).head(5)
+leaders_pts = data_leaders_pts_ordenado.sort_values(by=['FG%','FT%'], ascending=False).head(5)
 st.dataframe(leaders_pts[['Player','Tm','FT', 'FG', 'FG%','FT%']].reset_index(drop=True))
 
 
 
 
 teams_stats = data.groupby("Tm")[["FG%", "FT%"]].mean().reset_index()
+teams_stats = teams_stats[teams_stats.Tm != "TOT"]
 
 top5_fg = teams_stats.sort_values(by="FG%", ascending=False).head(5)
 
